@@ -1,3 +1,5 @@
 #+TITLE: org-hermes-http
 
 A simple HTTP API that handles storage of captures for org-hermes.
+
+Currently used by [[https://github.com/zoranzaric/org-hermes-telegram][org-hermes-telegram]].
