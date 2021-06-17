@@ -1,0 +1,13 @@
+[package]
+name = "org-hermes-http"
+version = "0.1.0"
+authors = ["Zoran Zaric <zz@zoranzaric.de>"]
+edition = "2018"
+
+[dependencies]
+rocket = {version = "0.5.0-rc.1", features = ["json"] }
+rocket_sync_db_pools = { version = "0.1.0-rc.1", default-features = false, features = ["sqlite_pool"] }
+
+# chrono = {  version = "0.4", features = ["serde"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"

@@ -1,0 +1,4 @@
+[global]
+port = 8888
+[global.databases]
+main_db = { url = "./db.sqlite" }
