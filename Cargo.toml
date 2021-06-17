@@ -1,6 +1,6 @@
 [package]
 name = "org-hermes-http"
-version = "0.1.0"
+version = "0.1.0-dev"
 authors = ["Zoran Zaric <zz@zoranzaric.de>"]
 edition = "2018"
 
