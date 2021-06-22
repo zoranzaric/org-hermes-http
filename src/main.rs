@@ -3,6 +3,7 @@ extern crate rocket;
 
 use rocket::serde::json::Json;
 use serde::{Deserialize, Serialize};
+use log::{info, error};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub(crate) struct Capture {
@@ -41,19 +42,26 @@ async fn load_captures(db: &DbConn) -> Vec<Capture> {
 
 #[post("/", data="<capture>")]
 async fn add_capture(db: DbConn, capture: Json<Capture>) {
+    info!("Adding capture");
     db.run(move |conn| {
         conn.execute("INSERT INTO capture (content, created_at, processed_at) VALUES (?, CURRENT_TIMESTAMP, NULL)", &[&capture.content]).unwrap();
     }).await;
+    info!("Added capture");
 }
 
 #[put("/processed/<id>")]
 async fn mark_capture_processed(db: DbConn, id: u32) {
+    info!("Marking capture {} as processed", id);
     db.run(move |conn| {
         let mut stmt = conn
-            .prepare("UPDATE capture SET processed_at = CURRENT_TIMESTAMP WHERE id = ?")
+            .prepare("UPDATE capture SET processed_at = CURRENT_TIMESTAMP WHERE id = ? AND processed_at IS NULL")
             .unwrap();
 
-        stmt.execute(&[&id]).unwrap();
+        match stmt.execute(&[&id]) {
+            Ok(1) => info!("Marked capture {} as processed.", id),
+            Ok(_) => error!("Could not mark capture {} as processed: did not match", id),
+            Err(e) => error!("Could not mark capture {} as processed: {}", id, e),
+        }
     })
     .await;
 }
